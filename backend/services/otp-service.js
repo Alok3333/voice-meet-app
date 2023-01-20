@@ -25,11 +25,13 @@ class OtpService {
     // creating new hash name is computedHash
     let computedHash = hashService.hashOtp(data);
 
-    if (computedHash === hashedOtp) {
-      return true;
-    } else {
-      return false;
-    }
+    return computedHash === hashedOtp;
+
+    // if (computedHash === hashedOtp) {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 }
 

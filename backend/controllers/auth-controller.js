@@ -56,7 +56,6 @@ class AuthController {
       res.status(400).json({ message: 'Invalid OTP' });
     }
 
-
     let user;
     let accessToken;
     let refreshToken;
