@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 function DbConnect() {
   const DB_URL = process.env.DB_URL;
+
   mongoose.set('strictQuery', false);
 
   // Database connection
   mongoose.connect(DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    // useFindAndModify: false,
   });
 
   const db = mongoose.connection;
