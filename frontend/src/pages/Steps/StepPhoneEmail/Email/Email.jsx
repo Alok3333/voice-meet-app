@@ -6,12 +6,12 @@ import TextInput from '../../../../components/common/TextInput/TextInput';
 import styles from '../StepPhoneEmail.module.css';
 
 const Email = ({ onNext }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   return (
     <Card title="Enter your email id" icon="email-emoji">
       <TextInput
-        value={phoneNumber}
-        onChange={(e) => setPhoneNumber(e.target.value)}
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <div>
         <div className={styles.actionButtonWrap}>
