@@ -5,11 +5,7 @@ import Navigation from './components/common/Navigation/Navigation';
 import Authenticate from './pages/Authenticate/Authenticate';
 import Activate from './pages/Activate/Activate';
 import Rooms from './pages/Rooms/Rooms';
-
-const isAuth = false;
-const user = {
-  activated: false,
-};
+import { useSelector } from 'react-redux';
 
 function App() {
   return (
@@ -19,7 +15,7 @@ function App() {
         <Route
           path="/"
           element={
-            <GuestRoute isAuth={isAuth}>
+            <GuestRoute>
               <Home />
             </GuestRoute>
           }
@@ -27,7 +23,7 @@ function App() {
         <Route
           path="/authenticate"
           element={
-            <GuestRoute isAuth={isAuth}>
+            <GuestRoute>
               <Authenticate />
             </GuestRoute>
           }
@@ -35,7 +31,7 @@ function App() {
         <Route
           path="/activate"
           element={
-            <SemiProtectedRoute isAuth={isAuth}>
+            <SemiProtectedRoute>
               <Activate />
             </SemiProtectedRoute>
           }
@@ -43,7 +39,7 @@ function App() {
         <Route
           path="/rooms"
           element={
-            <ProtectedRoute isAuth={isAuth}>
+            <ProtectedRoute>
               <Rooms />
             </ProtectedRoute>
           }
@@ -53,11 +49,13 @@ function App() {
   );
 }
 
-const GuestRoute = ({ children, isAuth }) => {
+const GuestRoute = ({ children }) => {
+  const { isAuth } = useSelector((state) => state.auth);
   return isAuth ? <Navigate to="/rooms" /> : children;
 };
 
-const SemiProtectedRoute = ({ children, isAuth }) => {
+const SemiProtectedRoute = ({ children }) => {
+  const { user, isAuth } = useSelector((state) => state.auth);
   return !isAuth ? (
     <Navigate to="/" />
   ) : isAuth && !user.activated ? (
@@ -67,7 +65,8 @@ const SemiProtectedRoute = ({ children, isAuth }) => {
   );
 };
 
-const ProtectedRoute = ({ children, isAuth }) => {
+const ProtectedRoute = ({ children }) => {
+  const { user, isAuth } = useSelector((state) => state.auth);
   return !isAuth ? (
     <Navigate to="/" />
   ) : isAuth && !user.activated ? (
