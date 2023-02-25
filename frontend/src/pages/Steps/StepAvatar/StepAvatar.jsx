@@ -5,10 +5,11 @@ import styles from './StepAvatar.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { setAvatar } from '../../../store/activateSlice';
+import { activate } from '../../../http';
 
 const StepAvatar = ({ onNext }) => {
   const dispatch = useDispatch();
-  const { name } = useSelector((state) => state.activate);
+  const { name, avatar } = useSelector((state) => state.activate);
   const [image, setImage] = useState('/images/monkey-avatar.png');
 
   const captureImage = (e) => {
@@ -18,7 +19,6 @@ const StepAvatar = ({ onNext }) => {
     reader.readAsDataURL(file);
     // used onloadend to read and loading fast the file images
     reader.onloadend = function () {
-      // console.log(reader.result);
       setImage(reader.result);
       // image is not a change when will you go to the privious state or component
       dispatch(setAvatar(reader.result));
@@ -27,7 +27,14 @@ const StepAvatar = ({ onNext }) => {
     // console.log(e);
   };
 
-  const submit = () => {};
+  const submit = async () => {
+    try {
+      const { data } = await activate({ name, avatar });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
