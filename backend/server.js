@@ -13,6 +13,7 @@ const corsOption = {
   origin: ['http://localhost:3000'],
 };
 app.use(cors(corsOption));
+app.use('/storage', express.static('storage'));
 
 // console.log(process.env);
 const PORT = process.env.PORT || 5500;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '../../../components/common/Button/Button';
 import Card from '../../../components/common/Card/Card';
 import styles from './StepAvatar.module.css';
@@ -6,11 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { setAvatar } from '../../../store/activateSlice';
 import { activate } from '../../../http';
+import { setAuth } from '../../../store/authSlice';
+import Loader from '../../../components/common/Loader/Loader';
 
 const StepAvatar = ({ onNext }) => {
   const dispatch = useDispatch();
   const { name, avatar } = useSelector((state) => state.activate);
   const [image, setImage] = useState('/images/monkey-avatar.png');
+  const [loading, setLoading] = useState(false);
+  const [unMounted, setUnMounted] = useState(false);
 
   const captureImage = (e) => {
     const file = e.target.files[0];
@@ -28,14 +32,31 @@ const StepAvatar = ({ onNext }) => {
   };
 
   const submit = async () => {
+    if (!name || !avatar) return;
+
+    setLoading(true);
     try {
       const { data } = await activate({ name, avatar });
-      console.log(data);
+      if (data.auth) {
+        if (!unMounted) {
+          dispatch(setAuth(data));
+        }
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      // If any cases it'll run
+      setLoading(false);
     }
   };
 
+  useEffect(() => {
+    return () => {
+      setUnMounted(true);
+    };
+  }, []);
+
+  if (loading) return <Loader message="Activation in progress..." />;
   return (
     <>
       <Card title={`Okay, ${name}`} icon="monkey-emoji">
