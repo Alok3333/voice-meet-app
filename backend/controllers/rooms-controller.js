@@ -1,3 +1,4 @@
+const RoomDto = require('../dtos/room-dto');
 const roomService = require('../services/room-service');
 
 class roomsController {
@@ -14,6 +15,8 @@ class roomsController {
       roomType,
       ownerId: req.user._id,
     });
+
+    return res.json(new RoomDto(room));
   }
 }
 
