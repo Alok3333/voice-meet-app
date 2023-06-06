@@ -5,7 +5,6 @@ import { createRoom as create } from '../../http/index';
 import { useNavigate } from 'react-router-dom';
 
 const AddRoomModal = ({ onClose }) => {
-  // const history = useHistory();
   const navigate = useNavigate();
 
   const [roomType, setRoomType] = useState('open');
