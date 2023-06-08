@@ -43,8 +43,8 @@ const Navigation = () => {
             <img
               className={styles.avatar}
               src={user.avatar ? user.avatar : '/images/monkey-avatar.png'}
-              width="40"
-              height="40"
+              width="50"
+              height="50"
               alt="avatar"
             />
           </Link>
