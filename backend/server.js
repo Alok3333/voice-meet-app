@@ -5,6 +5,7 @@ const router = require('./routes');
 const DbConnect = require('./database');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const ACTIONS = require('./actions');
 
 const server = require('http').createServer(app);
 
@@ -37,8 +38,25 @@ app.get('/', (req, res) => {
 
 // Sockets
 
+const socketUserMapping = {};
+
 io.on('connection', (socket) => {
   console.log('new connection', socket.id);
+
+  socket.on(ACTIONS.JOIN, ({ roomId, user }) => {
+    socketUserMapping[socket.id] = user;
+
+    // new Map
+    const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+
+    clients.forEach((clientId) => {
+      io.to(clientId).emit(ACTIONS.ADD_PEER, {});
+    });
+
+    socket.emit(ACTIONS.ADD_PEER, {});
+
+    socket.join(roomId);
+  });
 });
 
 server.listen(PORT, () => {
