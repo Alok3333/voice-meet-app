@@ -6,6 +6,15 @@ const DbConnect = require('./database');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
+const server = require('http').createServer(app);
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST'],
+  },
+});
+
 app.use(cookieParser());
 
 const corsOption = {
@@ -26,6 +35,6 @@ app.get('/', (req, res) => {
   res.send("<h1>Hi... I'm Express.</h1>");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`You are connecting on port number ${PORT}`);
 });
