@@ -35,6 +35,12 @@ app.get('/', (req, res) => {
   res.send("<h1>Hi... I'm Express.</h1>");
 });
 
+// Sockets
+
+io.on('connection', (socket) => {
+  console.log('new connection', socket.id);
+});
+
 server.listen(PORT, () => {
   console.log(`You are connecting on port number ${PORT}`);
 });

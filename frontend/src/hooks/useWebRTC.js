@@ -1,22 +1,17 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useStateWithCallback } from './useStateWithCallback';
-
-// const users = [
-//   {
-//     id: 1,
-//     name: 'Rakesh k',
-//   },
-//   {
-//     id: 2,
-//     name: 'Jhon Doe',
-//   },
-// ];
+import socketInit from '../socket';
 
 export const useWebRTC = (roomId, user) => {
   const [clients, setClients] = useStateWithCallback([]);
   const audioElements = useRef({});
   const connections = useRef({});
   const localMediaStream = useRef(null);
+  const socket = useRef(null);
+
+  useEffect(() => {
+    socket.current = socketInit();
+  }, []);
 
   const addNewClients = useCallback(
     (newClient, cb) => {
@@ -46,6 +41,7 @@ export const useWebRTC = (roomId, user) => {
         }
 
         // Socket emit Join socket.io
+        socket.current.emit('join', {});
       });
     });
   }, []);
