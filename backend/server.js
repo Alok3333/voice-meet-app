@@ -50,12 +50,36 @@ io.on('connection', (socket) => {
     const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
 
     clients.forEach((clientId) => {
-      io.to(clientId).emit(ACTIONS.ADD_PEER, {});
+      io.to(clientId).emit(ACTIONS.ADD_PEER, {
+        peerId: socket.id,
+        createOffer: false,
+        user,
+      });
     });
 
-    socket.emit(ACTIONS.ADD_PEER, {});
+    socket.emit(ACTIONS.ADD_PEER, {
+      peerId: clientId,
+      createOffer: true,
+      user: socketUserMapping[clientId],
+    });
 
     socket.join(roomId);
+  });
+
+  // Handle relay Ice
+  socket.on(ACTIONS.RELAY_ICE, ({ peerId, icecandidate }) => {
+    io.to(peerId).emit(ACTIONS.RELAY_ICE, {
+      peerId: socket.id,
+      icecandidate,
+    });
+  });
+
+  // Handle relay sdp (session description)
+  socket.on(ACTIONS.RELAY_SDP, ({ peerId, sessionDescription }) => {
+    io.to(peerId).emit(ACTIONS.RELAY_SDP, {
+      peerId: socket.id,
+      sessionDescription,
+    });
   });
 });
 
